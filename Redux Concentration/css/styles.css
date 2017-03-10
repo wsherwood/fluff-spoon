@@ -1,0 +1,10 @@
+.outer_card {
+    width: 100px;
+    padding 5px;
+    border: 1px solid red;
+    background: #eee url("../img/cardback_0");
+}
+
+.inner_card {
+    border: 1px solid blue;
+}
