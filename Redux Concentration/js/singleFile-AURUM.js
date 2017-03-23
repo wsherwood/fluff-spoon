@@ -1,6 +1,3 @@
-var Cards = [];
-var i;
-
 function Card(index) {
   'use strict';
   var self = this;
@@ -32,7 +29,8 @@ function Concentration() {
   'use strict';
   
   this.html = document.getElementById('concentrationgame');
-  var self = this;
+  var self = this,
+      i = 0;
   
   if (this.html === null || this.html === undefined) {
     this.html = document.createElement('div');
@@ -57,6 +55,9 @@ function Concentration() {
         }
       }
     }(event.target));
+    
+    // If the target card has been selected already, deselect it;
+    //
 
     // If neither card has been picked yet
     if (self.card1flipped === false && self.card2flipped === false) {
@@ -125,6 +126,8 @@ Concentration.prototype.resetVars = function () {
   this.selectedCard2 = null;
   this.card1flipped = false;
   this.card2flipped = false;
+  
+  console.log(this);
 };
 
 Concentration.prototype.gameCardMatch = function (card1, card2) {
@@ -157,8 +160,8 @@ Concentration.prototype.gameCardMismatch = function (card1, card2) {
     card1.html.classList.remove('selected');
     card2.html.classList.remove('selected');
     
-    card1.selectedCard1 = false;
-    card2.selectedCard1 = false;
+    card1.selected = false;
+    card2.selected = false;
   }, 900);
 };
 
@@ -168,3 +171,5 @@ Concentration.prototype.gameWin = function () {
   var self = this;
   alert('You win!');
 }
+
+var game = new Concentration();

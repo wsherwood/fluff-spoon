@@ -7,7 +7,14 @@
 div {
   border: 1px dotted blue;
 }
+
+header {
+  margin: auto;
+  padding: 1em 0.5em 0em;
+}
 .concentrationgame {
+  width: 70%;
+  margin: auto;
   border: 1px solid blue;
 }
 
@@ -18,6 +25,7 @@ div {
 
 .inner_card {
   visibility: hidden;
+  font-size: 6em;
   border: 1px solid blue;
 }
 
