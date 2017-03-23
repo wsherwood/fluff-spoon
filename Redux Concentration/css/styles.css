@@ -1,10 +1,31 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+div {
+  border: 1px dotted blue;
+}
+.concentrationgame {
+  border: 1px solid blue;
+}
+
 .outer_card {
-    width: 100px;
-    padding 5px;
-    border: 1px solid red;
-    background: #eee url("../img/cardback_0");
+  padding: 5px;
+  border: 1px solid red;
 }
 
 .inner_card {
-    border: 1px solid blue;
+  visibility: hidden;
+  border: 1px solid blue;
+}
+
+.selected {
+  visibility: visible;
+  background: blue;
+  box-shadow: 1px 1px 1px 1px;
+}
+.selected > .inner_card {
+  visibility: visible;
 }

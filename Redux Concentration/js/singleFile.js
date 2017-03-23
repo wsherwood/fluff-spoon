@@ -1,104 +1,64 @@
-function Card(num, index, onClick) {
-    'use strict';
+(function (window) {
+  'use strict';
+  
+  function Card() {
+    this.id = '0';
+    this.img = '.png';
+    this.isSelected = false;
+    this.isMatched = false;
     
-    this.value = num || 0;
-    this.index = index;
-    this.matched = false;
-    this.imgURL = './img/cardback_0.png';
-
-    this.html = document.createElement("img");
-    this.html.id = "card_" + index;
-    this.html.src = this.imgURL;
-    this.html.alt = " " + this.value;
-    document.getElementById("concentrationDiv").appendChild(this.html);
+    this.html = document.createElement('div');
+    this.html.id = 'card-' + this.id;
+    this.html.className = 'outer_card';
     
-    this.html.onclick = onClick;
-    this.html.style = {
-        background: this.matched ? 'green' : 'blue'
-    };
-//    this.html.onclick = function (event) {
-//        event = event || window.event;
-//        var target = this;
-//        this.style.background = "blue";
-//    };
-}
-
-function cards(state, action) {
-    'use strict';
+  }
+  
+  function ConcentrationGame() {
+    this.cards = [];
     
-    if (state === undefined) {
-        return [];
-    }
-    switch (action.type) {
-        case ACTIONS.ADD_CARD:
-            return state.concat(new Card(0, state.length + 1));
-        case ACTIONS.TOGGLE_CARD:
-            return state.map((card, index) => {
-                if (index === action.index) {
-                    return Object.assign({}, card, {
-                        visible: !card.visible
-                    })
-                }
-            // else return the state
-            return card;
-            });
-         default :
-            return state;       
-    }
-}
-
-function visibilityFilter(state, action) {
-    'use strict';
+    this.init();
+  }
+  
+  ConcentrationGame.prototype.init = function () {
+    this.game = document.getElementById('ConcentrationGame');
     
-    if (state === undefined) {
-        return ACTIONS.Visibility.SHOW_ALL;
+    if (this.game === undefined || this.game === null) {
+      this.game = document.createElement('div');
     }
     
-    switch (action.type) {
-        case SET_VISIBILITY:
-            return Object.assign({}, state, {
-                visibility : action.filter
-            })
-        default:
-            return state;
+    this.game.id = 'm';
+    this.game.className = 'm';
+    
+    this.gameScreens.startscreen = document.createElement('div');
+    this.gameScreens.startscreen.id = this.game.id + '_start-screen';
+    this.gameScreens.startscreen.className = 'start-screen';
+    
+    this.gameScreens.endscreen = document.createElement('div');
+    this.gameScreens.endscreen.id = this.game.id + '_end-screen';
+    this.gameScreens.endscreen.className = 'end-screen';
+    
+    // call the game setup function
+    this.setup();
+  };
+  
+  ConcentrationGame.prototype.setup = function () {
+    var self = this; // cache this
+    
+    this.gameState = 1;
+    
+    this.card1 = null;
+    this.card2 = null;
+    
+    this.matchedCards = 0;
+    this.numMoves = 0;
+    this.chosenLevel ='';
+    this.gameInfo = document.getElementById('m_info');
+    
+    if (this.gameInfo === undefined || this.gameInfo === null) {
+      this.gameInfo = document.createElement('div');
+      var innerNode = '<div class="' + this.game.id +'_info-level">Level:' + this.chosenLevel
     }
-}
-
-var ConcentrationGame = (function () {
-    'use strict';
-    
-    var instance,
-        numCards = 6,
-        i;
-    
-    numCards = numCards * 2;
-    // This is the function class definition and constructor
-    // function
-    function init() {
-        // Create and place the DOM element in the page
-        var gDiv = document.createElement('div');
-        gDiv.id = "concentrationDiv";
-        document.body.append(gDiv);
-        
-        var cards = [];
-        var selectedCard;
-        
-        // public interface and access
-        return {
-            cards : cards,
-            visibility : 'SHOW_ALL',
-            selectedCard : null
-        };
-    }
-    
-    return {
-        getInstance: function () {
-            if (!instance) {
-                instance = init();
-            }
-            return instance;
-        }
-    };
+    this.gameInfo.id = this.game.id + "_info";
+    this.gameInfo.className = this.game.id + "_info";
+  }
 }());
-
-

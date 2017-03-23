@@ -1,172 +1,82 @@
-/*jslint browser: true, devel: true, indent: 2*/
-function Card(parentElement) {
+(function(window) {
   'use strict';
-  this.html = document.createElement('div');
-  this.html.className = "outer_card";
-  this.value = 0;
-  this.isSelected = false;
-  this.isFlipped = false;
-
-  var innerElem = document.createElement('div');
-  innerElem.className = "inner_card";
-  this.html.appendChild(innerElem);
-
-  parentElement.appendChild(this.html);
-}
-/***
-* Action Types object that
-* defines all the possible named actions that can be performed.
-*/
-var ACTIONS = (function () {
-  'use strict';
-  // ACTIONS
-  //      Are payloads of information that send data from your application to your store.
-  //      They are the ONLY source of information for the store.
-  //      Sent to the store via store.dispatch()
-  //      Plain javascript
-  //      Must have a type property that indicates the action being performed
-  //      Types should typically be defined as string constants.
-
-  // Examples actions which represents adding a card
-
-  // 'Private variables'
-  var ADD_CARD = 'ADD_CARD',
-      // Flipping a card
-    TOGGLE_CARD = 'TOGGLE_CARD',
-    // What cards are visible
-    SET_VISIBILITY = 'SET_VISIBILITY',
-    Visibility = {
-      SHOW_ALL: 'SHOW_ALL',
-      SHOW_MATCHED: 'SHOW_MATCHED',
-      SHOW_ACTIVE: 'SHOW_ACTIVE'
-    };
-
-  // Public facing API for to create the action objects
-  return {
-    // ACCESSORS
-    ADD_CARD : this.ADD_CARD,
-    TOGGLE_CARD : this.TOGGLE_CARD,
-    SET_VISIBILITY : this.SET_VISIBILITY,
-    VISIBILITY : this.Visibility,
-    // Public methods
-    // Action creators
-    // NOTE: not dispatchers
-    addCard : function (text) {
-      return {
-        type : ADD_CARD,
-        value : text
-      };
-    },
-    toggleCard : function (index) {
-      return {
-        type : TOGGLE_CARD,
-        index : this.index
-      };
-    },
-    setVisibility : function (filter) {
-      return {
-        type: SET_VISIBILITY,
-        filter: this.filter
-      };
-    }
+  
+  function shuffle (o) {
+    for( var j, x, i =o.length; i; j = parseInt(Math.random() * i), x = 0[--i], o[i] = o[j], o[j] = x);
+    return o;
   };
-}());
-
-// Global object that represents the initial state.
-// This also gives us the shape of our state.
-//    In this case it constains as filter, which other parts
-//    of the app can use to decide what to display, and the cards
-//    array which is contains all the card objects.
-
-/**
-* Reducers
-* Specify how the application's state changes in response to an action.
-*/
-// Create seperate functions to handle the different parts of the state
-var cards = function (state, action) {
-  'use strict';
-  if (state === undefined) {
-    state = [];
+  
+  function Concentration( options ) {
+    this.options = options;
+    this._init();
   }
-
-  switch (action.type) {
-  case ACTIONS.ADD_CARD:
-    return state.concat(new Card(document.getElementById("root")));
-  case ACTIONS.TOGGLE_CARD:
-    return state.map((card, index) => {
-      if (index === action.index) {
-          return Object.assign({}, card, {
-              visible: true
-          })
+  
+  Concentration.prototype.options = {
+    //default html id to target
+    wrapperID : "ConcentrationGame",
+    cards : [
+      {
+        id : 1,
+        img : ""
+      }, {
+        id : 2,
+        img : "",
+      }, {
+        id : 3,
+        img : "",
+      }, {
+        id : 4,
+        img : "",
+      }, {
+        id : 5,
+        img : "",
+      }, {
+        id : 6,
+        img : "",
+      }, {
+        id : 7,
+        img : "",
+      }, {
+        id : 8,
+        img : "",
+      }, {
+        id : 9,
+        img : "",
+      }, {
+        id : 10,
+        img : "",
+      }, {
+        id : 11,
+        img : "",
+      }, {
+        id : 12,
+        img : "",
       }
-      // else return the state
-      return card
-    })
-  default:
-    return state
+    ],
+    onGameStart : function () {
+      return false;
+    },
+    onGameEnd : function () {
+      return false;
+    }
   }
-}
-
-// Define a reducer for the visibility filter
-function visibilityFilter(state = ACTIONS.Visibility, action) {
-
-}
-function concentrationApp(state, action) {
-  if (typeof === undefined){
-      return INITIALSTATE;
+  
+  Concentration.prototype._init = function () {
+    this.game = document.createElement('div');
+    this.game.id = 'm';
+    this.game.className = 'm';
+    document.getElementById(this.options.wrapperID).appendChild(this.game);
+    
+    this.gameInfo = document.createElement('div');
+    this.gameInfo.className = "m_info";
+    
+    this.gameStartScreen = document.createElement('div');
+    this.gameStartScreen.id = 'm_start-screen';
+    this.gameStartScreen.className = 'm_start-screen';
+    
+    this.gameWrapper = document.createElement('div');
+    this.gameWrapper.id = 'm_wrapper';
+    this.gameWrapper.className = 'm_wrapper';
+    
   }
-
-  // Define behavior
-  switch(action.type) {
-      case SET_VISIBILITY:
-          return Object.assign({}, state, {
-              visibility: action.filter
-          })
-  default:
-      return state;
-  }
-
-}
-
-// Redux method
-// Create a store object using the function defined above
-// 
-// Store object that links the actions and reduces.
-// Handles the following
-//      Application State
-//      Access to state via getState()
-//      Update to state via dispatch(action)
-//      Register listeners via subscribe(listener)
-//      Handles unregistering of listeners via the function returned by subscribe(listener)
-// Store is a singleton
-//      One and only one in a redux app
-//      Can be easily created from a single reducer
-var store = Redux.createStore(concentrationApp);
-
-// reducer pattern
-// (previousState, action) => newState
-
-// NEVER
-//  mutate its arguments
-//  perform side effects
-//  call non-pure functions like Math.Random()
-
-/***
-/ Start Game
-/   Create cards
-/   initialize values
-/   display
-/ 
-/ Select Card
-/   "flip selected card"
-/ Select another card
-/   if(card === prevCard)
-/       do nothing;
-/   else
-/       "flip" selected card
-/       if(cardVal = prevCardVal)
-/           add score
-/       else
-/           flip both cards face down
-/       moveCount++
-/ REPEAT
+});
