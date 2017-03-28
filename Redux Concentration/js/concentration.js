@@ -2,9 +2,10 @@ function Card(index) {
   'use strict';
   var self = this;
     
-  this.html = document.createElement('img');
+  this.html = document.createElement('div');
+  this.img = "url('../img/cardback_0.png')";
   this.html.className = 'outer_card';
-  this.html.src = '../img/cardback_0.png';
+  this.html.style.backgroundImage = this.img;
   this.value = index;
   this.html.innerHTML =  '<div class="inner_card"><span>-' + this.value + '-</span></div>';
   
@@ -122,6 +123,7 @@ Concentration.prototype.init = function () {
 
 Concentration.prototype.resetVars = function () {
   'use strict';
+  
   this.selectedCard1 = null;
   this.selectedCard2 = null;
   this.card1flipped = false;
@@ -139,13 +141,13 @@ Concentration.prototype.gameCardMatch = function (card1, card2) {
   card2.matched = true;
   
   window.setTimeout(function () {
-    card1.html.style.background = 'green';
-    card2.html.style.background = 'green';
+    card1.html.classList.add('matched');
+    card2.html.classList.add('matched');
   }, 300);
   
   window.setTimeout(function () {
-    card1.html.style.background = '';
-    card2.html.style.background = '';
+    card1.html.classList.remove('selected');
+    card2.html.classList.remove('selected');
   }, 1500);
   
   if (this.matches === this.chosenLevel) {

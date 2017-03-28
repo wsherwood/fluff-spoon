@@ -4,35 +4,46 @@
   box-sizing: border-box;
 }
 
-div {
-  border: 1px dotted blue;
-}
-
 header {
   margin: auto;
-  padding: 1em 0.5em 0em;
+  padding: 1em 0.5em;
+  text-align: center;
 }
 .concentrationgame {
   width: 70%;
   margin: auto;
-  border: 1px solid blue;
 }
 
 .outer_card {
+  margin: 0.1em;
+  float: left;
   padding: 5px;
-  border: 1px solid red;
+  width: 286px;
+  height: 395px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .inner_card {
   visibility: hidden;
-  font-size: 6em;
-  border: 1px solid blue;
+  text-align: center;
+  border: 5px solid black;
+  width: 90%;
+  height: 95%;
+  background-color: rgba(230, 230, 230, 0.7);
+  font-size: 12em;
 }
 
 .selected {
-  visibility: visible;
-  background: blue;
   box-shadow: 1px 1px 1px 1px;
+}
+
+.matched {
+  background: green;
+}
+.matched > .inner_card {
+  visibility: visible;
 }
 .selected > .inner_card {
   visibility: visible;
